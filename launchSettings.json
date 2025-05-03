@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "web.api": "StartDebugging",
+        "rabbitmq.producer": "StartDebugging",
+        "rabbitmq.consumer": "StartDebugging",
+        "masstransit.beginner": "StartDebugging"
+      }
+    }
+  }
+}
