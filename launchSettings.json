@@ -7,7 +7,9 @@
         "web.api": "StartDebugging",
         "rabbitmq.producer": "StartDebugging",
         "rabbitmq.consumer": "StartDebugging",
-        "masstransit.beginner": "StartDebugging"
+        "masstransit.beginner": "StartDebugging",
+        "newsletter.api": "StartDebugging",
+        "newletter.reporting.api": "StartDebugging"
       }
     }
   }

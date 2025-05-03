@@ -14,20 +14,19 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
-COPY ["Newletter.Reporting.API/Newletter.Reporting.API.csproj", "Newletter.Reporting.API/"]
-COPY ["Contracts/Contracts.csproj", "Contracts/"]
-RUN dotnet restore "./Newletter.Reporting.API/Newletter.Reporting.API.csproj"
+COPY ["Newsletter.API/Newsletter.API.csproj", "Newsletter.API/"]
+RUN dotnet restore "./Newsletter.API/Newsletter.API.csproj"
 COPY . .
-WORKDIR "/src/Newletter.Reporting.API"
-RUN dotnet build "./Newletter.Reporting.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Newsletter.API"
+RUN dotnet build "./Newsletter.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Newletter.Reporting.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Newsletter.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Newletter.Reporting.API.dll"]
+ENTRYPOINT ["dotnet", "Newsletter.API.dll"]

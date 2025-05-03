@@ -20,9 +20,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapPost("article", async (IPublishEndpoint publishEndpoint) =>
-{
+app.MapPost("article", async (IPublishEndpoint publishEndpoint) => {
     await publishEndpoint.Publish(new ArticleCreated("Hello World"));
+    Console.WriteLine("publish to queue");
 });
 
 

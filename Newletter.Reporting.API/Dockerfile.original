@@ -15,7 +15,6 @@ WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 COPY ["Newletter.Reporting.API/Newletter.Reporting.API.csproj", "Newletter.Reporting.API/"]
-COPY ["Contracts/Contracts.csproj", "Contracts/"]
 RUN dotnet restore "./Newletter.Reporting.API/Newletter.Reporting.API.csproj"
 COPY . .
 WORKDIR "/src/Newletter.Reporting.API"
