@@ -3,7 +3,7 @@ using MassTransit;
 
 namespace Newletter.Reporting.API.Consumers;
 
-public class ArticleCreatedConsumer:IConsumer<AnotherExchange>
+public class AnotherConsumer:IConsumer<AnotherExchange>
 {
     public Task Consume(ConsumeContext<AnotherExchange> context)
     {

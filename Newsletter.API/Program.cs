@@ -21,7 +21,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapPost("article", async (IPublishEndpoint publishEndpoint) => {
-    await publishEndpoint.Publish(new ArticleCreated("Hello World"));
+    await publishEndpoint.Publish(new MyQueue("Hello World"));
     Console.WriteLine("publish to queue");
 });
 
