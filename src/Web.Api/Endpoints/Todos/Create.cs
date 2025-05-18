@@ -7,7 +7,7 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Todos;
 
-internal sealed class Create : IEndpoint
+internal sealed class Create : IEndpoint, IEndpointWithoutMediatR
 {
     public sealed class Request
     {
@@ -37,5 +37,25 @@ internal sealed class Create : IEndpoint
         })
         .WithTags(Tags.Todos)
         .RequireAuthorization();
+    }
+
+    public void MapEndpointWithoutMediatR(IEndpointRouteBuilder app)
+    {
+        app.MapPost("todosWithoutMediatr", async (Request request,CancellationToken cancellationToken, CreateTodoCommandHandler createTodoCommandHandler) => {
+
+                var command = new CreateTodoCommand
+                {
+                    UserId = request.UserId,
+                    Description = request.Description,
+                    DueDate = request.DueDate,
+                    Labels = request.Labels,
+                    Priority = (Priority)request.Priority
+                };
+
+                Result<Guid> result =   await createTodoCommandHandler.Handle(command, cancellationToken);
+                return result.Match(Results.Ok, CustomResults.Problem);
+
+        }).WithTags(Tags.TodosWithMediatr)
+            .RequireAuthorization();
     }
 }

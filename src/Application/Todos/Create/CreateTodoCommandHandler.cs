@@ -9,7 +9,7 @@ using SharedKernel;
 
 namespace Application.Todos.Create;
 
-internal sealed class CreateTodoCommandHandler(
+public sealed class CreateTodoCommandHandler(
     IApplicationDbContext context,
     IDateTimeProvider dateTimeProvider,
     IUserContext userContext, 

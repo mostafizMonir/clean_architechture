@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Behaviors;
 using Application.Repositories;
+using Application.Todos.Create;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +19,9 @@ public static class DependencyInjection
         });
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
-       
+        
+        // Register CreateTodoCommandHandler as a service
+        services.AddScoped<CreateTodoCommandHandler>();
 
         return services;
     }

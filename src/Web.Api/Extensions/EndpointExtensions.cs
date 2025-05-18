@@ -31,6 +31,11 @@ public static class EndpointExtensions
         foreach (IEndpoint endpoint in endpoints)
         {
             endpoint.MapEndpoint(builder);
+
+            if (endpoint is IEndpointWithoutMediatR endpointWithoutMediatR)
+            {
+                endpointWithoutMediatR.MapEndpointWithoutMediatR(builder);
+            }
         }
 
         return app;
