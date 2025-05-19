@@ -14,7 +14,12 @@ internal sealed class Delete : IEndpoint
         {
             var command = new DeleteTodoCommand(id);
 
-            Result result = await sender.Send(command, cancellationToken);
+            Result? result = (Result<Guid>?)await sender.Send(command, cancellationToken);
+
+            if (result == null)
+            {
+                return Results.Problem("Unexpected null result from command handler.");
+            }
 
             return result.Match(Results.NoContent, CustomResults.Problem);
         })

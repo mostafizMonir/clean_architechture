@@ -1,4 +1,5 @@
-﻿using Application.Todos.Create;
+﻿using Application.Abstractions.Messaging;
+using Application.Todos.Create;
 using Domain.Todos;
 using MediatR;
 using SharedKernel;
@@ -31,8 +32,11 @@ internal sealed class Create : IEndpoint, IEndpointWithoutMediatR
                 Priority = (Priority)request.Priority
             };
 
-            Result<Guid> result = await sender.Send(command, cancellationToken);
-
+            Result<Guid> result = (Result<Guid>)await sender.Send(command, cancellationToken);
+            if (result == null)
+            {
+                return Results.Problem("Unexpected null result from command handler.");
+            }
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.Todos)
@@ -41,7 +45,7 @@ internal sealed class Create : IEndpoint, IEndpointWithoutMediatR
 
     public void MapEndpointWithoutMediatR(IEndpointRouteBuilder app)
     {
-        app.MapPost("todosWithoutMediatr", async (Request request,CancellationToken cancellationToken, CreateTodoCommandHandler createTodoCommandHandler) => {
+        app.MapPost("todosWithoutMediatr", async (Request request,CancellationToken cancellationToken, ICommandHandler<CreateTodoCommand> createTodoCommandHandler) => {
 
                 var command = new CreateTodoCommand
                 {
@@ -52,10 +56,9 @@ internal sealed class Create : IEndpoint, IEndpointWithoutMediatR
                     Priority = (Priority)request.Priority
                 };
 
-                Result<Guid> result =   await createTodoCommandHandler.Handle(command, cancellationToken);
-                return result.Match(Results.Ok, CustomResults.Problem);
+                await createTodoCommandHandler.Handle(command, cancellationToken);
 
-        }).WithTags(Tags.TodosWithMediatr)
+            }).WithTags(Tags.TodosWithMediatr)
             .RequireAuthorization();
     }
 }

@@ -14,11 +14,11 @@ public sealed class CreateTodoCommandHandler(
     IDateTimeProvider dateTimeProvider,
     IUserContext userContext, 
     IRepository<TodoItem> repository)
-    : ICommandHandler<CreateTodoCommand, Guid>
+    : ICommandHandler<CreateTodoCommand>
 {
 
     
-    public async Task<Result<Guid>> Handle(CreateTodoCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateTodoCommand command, CancellationToken cancellationToken)
     {
         if (userContext.UserId != command.UserId)
         {
@@ -53,6 +53,6 @@ public sealed class CreateTodoCommandHandler(
 
       //  await context.SaveChangesAsync(cancellationToken);
 
-        return todoItem.Id;
+        return Result.Success(todoItem.Id);
     }
 }

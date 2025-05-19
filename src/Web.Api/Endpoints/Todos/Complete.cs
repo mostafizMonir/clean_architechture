@@ -14,8 +14,11 @@ internal sealed class Complete : IEndpoint
         {
             var command = new CompleteTodoCommand(id);
 
-            Result result = await sender.Send(command, cancellationToken);
-
+            Result result = (Result<Guid>)await sender.Send(command, cancellationToken);
+            if (result == null)
+            {
+                return Results.Problem("Unexpected null result from command handler.");
+            }
             return result.Match(Results.NoContent, CustomResults.Problem);
         })
         .WithTags(Tags.Todos)
