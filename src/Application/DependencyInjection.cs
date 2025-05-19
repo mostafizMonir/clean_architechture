@@ -23,7 +23,15 @@ public static class DependencyInjection
         
         // Register CreateTodoCommandHandler as a service
         //services.AddScoped<CreateTodoCommandHandler>();
-        services.AddScoped<ICommandHandler<CreateTodoCommand>, CreateTodoCommandHandler>();
+       // services.AddScoped<ICommandHandler<CreateTodoCommand>, CreateTodoCommandHandler>();
+
+       services.Scan(
+           scan=> scan
+               .FromAssemblies(typeof(DependencyInjection).Assembly)
+               .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
+               .AsImplementedInterfaces()
+               .WithScopedLifetime()
+           );
 
         return services;
     }
