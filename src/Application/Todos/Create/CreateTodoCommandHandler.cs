@@ -14,12 +14,14 @@ public sealed class CreateTodoCommandHandler(
     IDateTimeProvider dateTimeProvider,
     IUserContext userContext, 
     IRepository<TodoItem> repository)
-    : ICommandHandler<CreateTodoCommand>
+    //: ICommandHandler<CreateTodoCommand>
+    : CommandHandler<CreateTodoCommand>
 {
 
     
-    public async Task<Result> Handle(CreateTodoCommand command, CancellationToken cancellationToken)
+    public override async Task<Result> Handle(CreateTodoCommand command, CancellationToken cancellationToken)
     {
+       
         if (userContext.UserId != command.UserId)
         {
             return Result.Failure<Guid>(UserErrors.Unauthorized());
